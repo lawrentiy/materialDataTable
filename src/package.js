@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lawrentiy:material-data-table',
-  version: '0.0.1',
+  version: '0.0.2',
   summary: 'MaterialDataTable - it`s pretty react + material-ui ',
   git: 'https://github.com/lawrentiy/materialDataTable',
   documentation: '../README.md'
