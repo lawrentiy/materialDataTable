@@ -1,0 +1,15 @@
+{
+  "name": "meteor-react-material-ui-table",
+  "private": true,
+  "scripts": {
+    "start": "meteor run"
+  },
+  "dependencies": {
+    "material-ui": "^0.15.0",
+    "meteor-node-stubs": "~0.2.0",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0",
+    "react-komposer": "^1.8.0",
+    "react-tap-event-plugin": "^1.0.0"
+  }
+}
