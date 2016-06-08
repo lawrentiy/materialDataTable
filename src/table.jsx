@@ -92,5 +92,5 @@ function composer(props, onData) {
         });
     }
 }
-export { Table, TabledData, TableHolder}
+
 export default composeWithTracker(composer)(Table);

@@ -4,7 +4,7 @@ import * as SvgIcon from 'material-ui/svg-icons';
 import * as Styles from 'material-ui/styles';
 import {composeWithTracker} from 'react-komposer';
 import Pagination from './pagination.jsx'
-import {TabledData, Table} from './table.jsx'
+import Table from './table.jsx'
 
 function holderComposer(props, onData) {
     onData(null, {});
@@ -33,7 +33,7 @@ class TableH extends React.Component {
 
         return (<div>
             <Pagination onChange={this.onPageChange} />
-            <TabledData {...this.props} subscription={this.sub}/>
+            <Table {...this.props} subscription={this.sub}/>
         </div>
         )
     }
@@ -42,7 +42,7 @@ class TableH extends React.Component {
 const DataTable = composeWithTracker(holderComposer)(TableH);
 
 export {
-    Table, TabledData, Pagination, DataTable
+    Table, Pagination, DataTable
 }
 
 export default DataTable

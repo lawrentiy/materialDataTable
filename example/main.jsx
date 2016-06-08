@@ -6,7 +6,7 @@ import {composeWithTracker} from 'react-komposer';
 import { Mongo } from 'meteor/mongo';
 
 // Import package with DataTable
-import DataTable from 'meteor/lawrentiy:material-ui-table';
+import DataTable from 'meteor/lawrentiy:material-data-table';
 
 Coll = new Mongo.Collection('collection'); //Initialize collection
 
