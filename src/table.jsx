@@ -38,7 +38,6 @@ class Table extends React.Component {
                 columns.push(_.defaults(schema[f], {field: f}));
             }
         }
-
         Table.onRowSelection = this.onRowSelection;
 
         return (
@@ -54,9 +53,15 @@ class Table extends React.Component {
                 <UI.TableBody {...TableBody}>
                     {data.map((record) => (
                         <UI.TableRow key={record._id}>
-                            {columns.map((column) => (
-                                <UI.TableRowColumn key={column.field}>{record[column.field]}</UI.TableRowColumn>
-                            ))}
+                            {columns.map((column) => {
+                                    const v = record[column.field];
+                                    let fld;
+                                    if (_.isBoolean(v)) // if value is boolean, show as checkbox
+                                        fld = <UI.Checkbox checked={v} disabled={true} />;
+                                    else // default as string
+                                        fld = v;
+                                    return (<UI.TableRowColumn key={column.field}>{fld}</UI.TableRowColumn>)}
+                            )}
                             <UI.TableRowColumn style={style.actions}>
                                 <UI.IconButton onClick={this.onEditClick.bind(this, record)} >
                                     <EditorModeEdit color={Styles.colors.grey400} />

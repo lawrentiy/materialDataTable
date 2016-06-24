@@ -2,8 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { render } from 'react-dom';
 import * as Styles from 'material-ui/styles';
+import * as UI from 'material-ui';
 import {composeWithTracker} from 'react-komposer';
 import { Mongo } from 'meteor/mongo';
+import ReactAutoForm from './autoform.js';
 
 // Import package with DataTable
 import DataTable from 'meteor/lawrentiy:material-data-table';
@@ -27,30 +29,61 @@ Coll.attachSchema(new SimpleSchema(schemaObject)); // Attach schema to collectio
 
 // Create react class for application with DataTable and material-ui
 class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        }
+    }
+
     render() {
         return (
             <Styles.MuiThemeProvider muiTheme={Styles.getMuiTheme(Styles.lightBaseTheme)}>
-                <DataTable
-                    publication="collection"
-                    collection={Coll}
-                    settings ={{
-                    Table: {
-                        fixedHeader: true,
-                        fixedFooter: true,
-                        selectable: false,
-                        height: 'calc(100vh - 75px)'
-                    },
-                    TableHeader: {
-                        displaySelectAll: false,
-                        adjustForCheckbox: false
-                    },
-                    TableBody: {
-                        selectable: false,
-                        displayRowCheckbox: false,
-                        showRowHover: true
-                    }
-                }}
-                    />
+                <div>
+                    <DataTable
+                        publication="collection"
+                        collection={Coll}
+                        //onEditClick={(record)=>{console.log(this, record);}}
+                        onEditClick ={(record) => {
+                                this.setState({open: true, doc: record, mode: "update"});
+                            }}
+                        settings ={{
+                        Table: {
+                            fixedHeader: true,
+                            fixedFooter: true,
+                            selectable: false,
+                            height: 'calc(100vh - 75px)'
+                        },
+                        TableHeader: {
+                            displaySelectAll: false,
+                            adjustForCheckbox: false
+                        },
+                        TableBody: {
+                            selectable: false,
+                            displayRowCheckbox: false,
+                            showRowHover: true
+                        }
+                    }}
+                        />
+
+                    <UI.Dialog
+                        title="Edit record"
+                        //actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        //onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        >
+                        <ReactAutoForm collection={Coll} type="update"
+                                       doc = {this.state.doc}
+                                       debug = {true}
+                                       onSubmit={() => {
+                                                console.log(this);
+                                                this.setState({open: false, doc: undefined})
+                                            }}/>
+                    </UI.Dialog>
+                </div>
             </Styles.MuiThemeProvider>
         )
     }
@@ -72,6 +105,15 @@ if (Meteor.isServer) {
             })
         }
     }
+
+    Coll.allow({
+        insert: function() {
+            return true;
+        },
+        update: function() {
+            return true;
+        }
+    });
 
     Meteor.publish('collection', function({paging, sort}) { // publish collection with parameters paging and sort
         const filter = {};

@@ -1,5 +1,10 @@
 MaterialDataTable - Is a table with paging for React and Material-UI.
 
+Install.
+1. meteor npm i react react-komposer material-ui --save
+2. meteor add lawrentiy:material-data-table
+3. See example folder for usecase
+
 It`s only first step now. I`m use it in my projects successful. And it will more powerful and usefull.
 The main idea - to solve standart task:
     Display to users tabled data with filter, pagination and action buttons(add, edit, delete).

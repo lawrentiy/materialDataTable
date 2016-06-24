@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lawrentiy:material-data-table',
-  version: '0.0.3',
+  version: '0.0.4',
   summary: 'MaterialDataTable - it`s pretty react + material-ui table with pagination',
   git: 'https://github.com/lawrentiy/materialDataTable',
   documentation: '../README.md'
@@ -12,7 +12,7 @@ Package.describe({
 //});
 
 Package.onUse(function(api) {
-  api.versionsFrom('1.3.2.4');
+  api.versionsFrom('1.3.4');
   api.use('ecmascript');
   api.mainModule('dataTable.js');
 });
