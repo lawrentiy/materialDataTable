@@ -7,8 +7,14 @@ import {composeWithTracker} from 'react-komposer';
 import { Mongo } from 'meteor/mongo';
 import ReactAutoForm from './autoform.js';
 
+// TODO: remove it from that calls and put inside package
+import { Match } from 'meteor/check'
+SimpleSchema.extendOptions({
+    MMR: Match.Optional(Object)
+});
+
 // Import package with DataTable
-import DataTable from 'meteor/lawrentiy:material-data-table';
+import DataTable, {generateColumnsList} from 'meteor/lawrentiy:material-data-table'
 
 Coll = new Mongo.Collection('collection'); //Initialize collection
 
@@ -16,12 +22,14 @@ const schemaObject = { // Define scheme of data
     f1: {
         optional: false,
         type: String,
-        max: 100
+        max: 100,
+        MMR: {table: true}
     },
     f2: {
         optional: false,
         type: String,
-        max: 100
+        max: 100,
+        MMR: {table: true}
     }
 };
 
@@ -33,6 +41,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            // get colums from SimpleSchema. second parameter - for titles generating
+            columns: generateColumnsList(Coll, (title) => title),
             open: false
         }
     }
@@ -44,27 +54,26 @@ class App extends React.Component {
                     <DataTable
                         publication="collection"
                         collection={Coll}
-                        //onEditClick={(record)=>{console.log(this, record);}}
+                        columns = {this.state.columns}
                         onEditClick ={(record) => {
                                 this.setState({open: true, doc: record, mode: "update"});
                             }}
                         settings ={{
-                        Table: {
-                            fixedHeader: true,
-                            fixedFooter: true,
-                            selectable: false,
-                            height: 'calc(100vh - 75px)'
-                        },
-                        TableHeader: {
-                            displaySelectAll: false,
-                            adjustForCheckbox: false
-                        },
-                        TableBody: {
-                            selectable: false,
-                            displayRowCheckbox: false,
-                            showRowHover: true
-                        }
-                    }}
+                            Table: {
+                                fixedHeader: true,
+                                fixedFooter: true,
+                                selectable: false
+                            },
+                            TableHeader: {
+                                displaySelectAll: false,
+                                adjustForCheckbox: false
+                            },
+                            TableBody: {
+                                selectable: false,
+                                displayRowCheckbox: false,
+                                showRowHover: true
+                            }
+                        }}
                         />
 
                     <UI.Dialog
@@ -91,10 +100,12 @@ class App extends React.Component {
 
 if (Meteor.isClient) { // Render App into Dom
     Meteor.startup(function() {
+        console.log('!!!!!!!!!!');
         render(<App />, document.getElementById('react-holder'));
     });
 }
 
+// Server methods and fixtures
 if (Meteor.isServer) {
 
     if (Coll.find().count() == 0) { // Create 1000 documents
